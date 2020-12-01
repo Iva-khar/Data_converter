@@ -44,25 +44,30 @@ class CompanyViewSet(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class HistoricalAssigneeView(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'company'
     queryset = HistoricalAssignee.objects.all()
     serializer_class = HistoricalAssigneeSerializer
 
 
 class HistoricalCompanyView(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'company'
     queryset = HistoricalCompany.objects.all()
     serializer_class = HistoricalCompanySerializer
 
 
 class HistoricalCompanyDetailView(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'company'
     queryset = HistoricalCompanyDetail.objects.all()
     serializer_class = HistoricalCompanyDetailSerializer
 
 
 class HistoricalFounderView(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'company'
     queryset = HistoricalFounder.objects.all()
     serializer_class = HistoricalFounderSerializer
 
 
 class HistoricalSignerView(CachedViewMixin, viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'company'
     queryset = HistoricalSigner.objects.all()
     serializer_class = HistoricalSignerSerializer
