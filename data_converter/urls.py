@@ -55,7 +55,7 @@ router.register(r'register', RegisterView, basename='register')
 router.register(r'historical-company', HistoricalCompanyView, basename='historical_company')
 router.register(r'historical-assignee', HistoricalAssigneeView, basename='historical_assignee')
 router.register(r'historical-company-detail', HistoricalCompanyDetailView, basename='historical_company_detail')
-router.register(r'historical-founder', HistoricalFounderView, basename='historical_founder')
+#router.register(r'historical-founder', HistoricalFounderView, basename='historical_founder')
 router.register(r'historical-signer', HistoricalSignerView, basename='historical_signer')
 router.register(r'pep', PepViewSet, basename='pep')
 
@@ -109,6 +109,7 @@ urlpatterns = [
     ),
 
     path('api/', include((router.urls, 'registers'), namespace='registers')),
+    path('api/historical-founder/<int:fk>/', HistoricalFounderView.as_view(), name='historical-founder'),
 ]
 
 if settings.DEBUG:

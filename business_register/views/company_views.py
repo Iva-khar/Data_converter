@@ -1,8 +1,11 @@
 from django.apps import apps
+from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from business_register.filters import CompanyFilterSet
 from business_register.models.company_models import Company
 from business_register.permissions import PepSchemaToken
@@ -66,11 +69,17 @@ class HistoricalCompanyDetailView(RegisterViewMixin,
     serializer_class = HistoricalCompanyDetailSerializer
 
 
-class HistoricalFounderView(RegisterViewMixin,
-                            CachedViewMixin,
-                            viewsets.ReadOnlyModelViewSet):
-    queryset = HistoricalFounder.objects.all()
-    serializer_class = HistoricalFounderSerializer
+class HistoricalFounderView(CachedViewMixin, APIView):
+    def get_objects(self, fk):
+        try:
+            return HistoricalFounder.objects.filter(company=fk)
+        except HistoricalFounder.DoesNotExist:
+            raise Http404
+
+    def get(self, request, fk, format=None):
+        records = self.get_objects(fk)
+        serializer = HistoricalFounderSerializer(records, many=True)
+        return Response(serializer.data)
 
 
 class HistoricalSignerView(RegisterViewMixin,
