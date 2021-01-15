@@ -83,6 +83,7 @@ CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1',
 ]
 
+EXPORT_FOLDER = 'export/'
 LOCAL_FOLDER = 'unzipped_xml/'
 
 EMAIL_BACKEND = 'data_converter.email_backend.SendGridEmailBackend'

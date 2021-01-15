@@ -6,6 +6,7 @@
 # *.so
 *.pid
 .DS_Store
+export
 /.env
 celerybeat-schedule
 /.idea
