@@ -30,7 +30,7 @@ class FopViewSet(RegisterViewMixin,
             if request.GET['export'] == 'xlsx':
                 queryset = self.filter_queryset(self.get_queryset())
                 export_dict = {
-                    'Full Name': 'name',
+                    'Full Name': 'fullname',
                     'Status': 'status',
                     'Address': 'address',
                     'Registration Date': 'registration_date',
@@ -55,7 +55,11 @@ def export_xlsx(queryset, export_file_path, export_dict, worksheet_title):
         cell = worksheet.cell(row=row_num, column=col_num)
         cell.value = column_title
         for record in queryset:
+            sell_value = getattr(record, query_field)
             row_num += 1
             cell = worksheet.cell(row=row_num, column=col_num)
-            cell.value = locals().get('record.'+query_field)
+            try:
+                cell.value = sell_value
+            except:
+                cell.value = repr(sell_value)
     return workbook.save(export_file_path)
