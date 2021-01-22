@@ -1,15 +1,15 @@
-import logging
-import os
-import subprocess
-import zipfile
 from abc import ABC
-
-import requests
+import codecs
 from django.conf import settings
 from django.db import connections
 from django.utils import timezone
+import logging
+import os
+import requests
+import subprocess
+import tempfile
+import zipfile
 
-# import psycopg2
 from data_ocean.models import RegistryUpdaterModel, Dataset
 
 logger = logging.getLogger(__name__)
@@ -22,6 +22,7 @@ class Downloader(ABC):
     data = {}
     headers = {}
     local_path = settings.LOCAL_FOLDER
+    LOCAL_FILE_NAME = settings.LOCAL_FILE_NAME_UO
     chunk_size = 8 * 1024 * 1024
     stream = True
     reg_name = ''
@@ -188,3 +189,13 @@ class Downloader(ABC):
         setattr(dataset, field_name, new_field_value)
         dataset.save(update_fields=[field_name, 'updated_at'])
 
+    # after 12.30.2020 the full UO source file from data.gov.ua needs to be decoded and replaced some symbols by this
+    # method
+    def replace(self):
+        file = self.local_path + self.LOCAL_FILE_NAME
+        tmp = tempfile.mkstemp()
+        with codecs.open(file, 'r', 'Windows-1251') as fd1, codecs.open(tmp[1], 'w', 'UTF-8') as fd2:
+            for line in fd1:
+                line = line.replace('&quot;', '"').replace('windows-1251', 'UTF-8')
+                fd2.write(line)
+        os.rename(tmp[1], file)
