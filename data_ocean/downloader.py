@@ -22,7 +22,7 @@ class Downloader(ABC):
     data = {}
     headers = {}
     local_path = settings.LOCAL_FOLDER
-    LOCAL_FILE_NAME = settings.LOCAL_FILE_NAME_UO
+    LOCAL_FILE_NAME_UO = settings.LOCAL_FILE_NAME_UO
     chunk_size = 8 * 1024 * 1024
     stream = True
     reg_name = ''
@@ -192,7 +192,7 @@ class Downloader(ABC):
     # after 12.30.2020 the full UO source file from data.gov.ua needs to be decoded and replaced some symbols by this
     # method
     def replace(self):
-        file = self.local_path + self.LOCAL_FILE_NAME
+        file = self.local_path + self.LOCAL_FILE_NAME_UO
         tmp = tempfile.mkstemp()
         with codecs.open(file, 'r', 'Windows-1251') as fd1, codecs.open(tmp[1], 'w', 'UTF-8') as fd2:
             for line in fd1:
